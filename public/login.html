@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .login-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+        margin: 250px auto;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      button[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 20px;
+        cursor: pointer;
+      }
+      button[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+      .main-container {
+        display: none;
+      }
+      .main-table {
+        border-collapse: collapse;
+        width: 600px;
+      }
+      .main-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+      .name-column {
+        width: 20%;
+        cursor: pointer;
+      }
+      .details-table {
+        border-collapse: collapse;
+        width: 100%;
+        display: none;
+      }
+      .details-table th,
+      .details-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container" id="div">
+      <h2>Login</h2>
+      <form action="#" method="post" id="form">
+        <input type="text" name="username" placeholder="Username" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" id="login-botton">Login</button>
+      </form>
+    </div>
+
+    <div id="card" class="main-container">
+      <div id="tablesContainer"></div>
+    </div>
+
+    <script>
+      const loginContainer = document.getElementById("div");
+      const buttonLogin = document.getElementById("login-botton");
+      const card = document.getElementById("card");
+      const form = document.getElementById("form");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        loginContainer.style.display = "none";
+        card.style.display = "block";
+        // Ваш массив данных
+        const data = [
+          {
+            id: 1,
+            doctorId: 1,
+            name: "Иванов Иванов",
+            debit: 100,
+            credit: 200,
+            comment: "Buy",
+            status: 0,
+          },
+          {
+            id: 2,
+            doctorId: 2,
+            name: "Alaman",
+            debit: 100,
+            credit: 200,
+            comment: "Buy",
+            status: 0,
+          },
+          {
+            id: 3,
+            doctorId: 2,
+            name: "Alaman",
+            debit: 100,
+            credit: 200,
+            comment: "Buy",
+            status: 0,
+          },
+        ];
+
+        const tablesContainer = document.getElementById("tablesContainer");
+
+        // Группируем данные по doctorId
+        const groupedData = {};
+        data.forEach((item) => {
+          if (!groupedData[item.doctorId]) {
+            groupedData[item.doctorId] = [];
+          }
+          groupedData[item.doctorId].push(item);
+        });
+        console.log(groupedData)
+
+        // Проходим по каждой группе данных и создаем таблицы
+        for (const doctorId in groupedData) {
+          if (groupedData.hasOwnProperty(doctorId)) {
+            const transactions = groupedData[doctorId];
+
+            const table = document.createElement("table");
+            table.className = "main-table";
+            table.innerHTML = `
+                    <tr>
+                        <th class="name-column" onclick="toggleDetails('detailsRow${doctorId}')">Имя</th>
+                        <th>Дебит</th>
+                        <th>Кредит</th>
+                        <th>Дата</th>
+                        <th>Комментарий</th>
+                        <th>Статус</th>
+                    </tr>
+                `;
+
+            transactions.forEach((item) => {
+              const newRow = document.createElement("tr");
+
+              const nameCell = document.createElement("td");
+              nameCell.className = "name-column";
+              nameCell.innerText = item.name;
+              nameCell.onclick = function () {
+                toggleDetails("detailsRow" + item.id);
+              };
+
+              newRow.appendChild(nameCell);
+
+              const debitCell = document.createElement("td");
+              debitCell.innerText = item.debit;
+              newRow.appendChild(debitCell);
+
+              const creditCell = document.createElement("td");
+              creditCell.innerText = item.credit;
+              newRow.appendChild(creditCell);
+
+              const dateCell = document.createElement("td");
+              dateCell.innerText = "2023-08-16"; // Измените на фактическую дату
+              newRow.appendChild(dateCell);
+
+              const commentCell = document.createElement("td");
+              commentCell.innerText = item.comment;
+              newRow.appendChild(commentCell);
+
+              const statusCell = document.createElement("td");
+              statusCell.innerText = "Успешно"; // Измените на статус из item.status
+              newRow.appendChild(statusCell);
+
+              table.appendChild(newRow);
+            });
+
+            const detailsRow = document.createElement("tr");
+            detailsRow.id = `detailsRow${doctorId}`;
+            detailsRow.style.display = "none";
+
+            const detailsCell = document.createElement("td");
+            detailsCell.colSpan = 6;
+            detailsCell.appendChild(table);
+
+            detailsRow.appendChild(detailsCell);
+            tablesContainer.appendChild(detailsRow);
+          }
+        }
+      });
+
+      function toggleDetails(tableId) {
+        var detailsTable = document.getElementById(tableId);
+        if (detailsTable.style.display === "none") {
+          detailsTable.style.display = "table";
+        } else {
+          detailsTable.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>
