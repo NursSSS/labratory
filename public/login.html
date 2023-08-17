@@ -95,7 +95,7 @@
         e.preventDefault();
         loginContainer.style.display = "none";
         card.style.display = "block";
-        // Ваш массив данных
+
         const data = [
           {
             id: 1,
@@ -127,8 +127,20 @@
         ];
 
         const tablesContainer = document.getElementById("tablesContainer");
+        tablesContainer.innerHTML = ""; // Очищаем контейнер
+        const table = document.createElement("table");
+        table.className = "main-table";
+        table.innerHTML = `
+      <tr>
+          <th class="name-column">Имя</th>
+          <th>Дебит</th>
+          <th>Кредит</th>
+          <th>Дата</th>
+          <th>Комментарий</th>
+          <th>Статус</th>
+      </tr>
+  `;
 
-        // Группируем данные по doctorId
         const groupedData = {};
         data.forEach((item) => {
           if (!groupedData[item.doctorId]) {
@@ -136,74 +148,74 @@
           }
           groupedData[item.doctorId].push(item);
         });
-        console.log(groupedData)
 
-        // Проходим по каждой группе данных и создаем таблицы
         for (const doctorId in groupedData) {
           if (groupedData.hasOwnProperty(doctorId)) {
             const transactions = groupedData[doctorId];
 
-            const table = document.createElement("table");
-            table.className = "main-table";
-            table.innerHTML = `
-                    <tr>
-                        <th class="name-column" onclick="toggleDetails('detailsRow${doctorId}')">Имя</th>
-                        <th>Дебит</th>
-                        <th>Кредит</th>
-                        <th>Дата</th>
-                        <th>Комментарий</th>
-                        <th>Статус</th>
-                    </tr>
-                `;
-
-            transactions.forEach((item) => {
+            transactions.forEach((item, index) => {
               const newRow = document.createElement("tr");
+              newRow.setAttribute("id", `row${doctorId}`);
 
               const nameCell = document.createElement("td");
               nameCell.className = "name-column";
-              nameCell.innerText = item.name;
+              nameCell.innerText = index === 0 ? item.name : ""; // Отображаем имя только в первой строке
+              nameCell.setAttribute("data-userid", doctorId);
               nameCell.onclick = function () {
-                toggleDetails("detailsRow" + item.id);
+                showMoreDetails(doctorId);
               };
-
               newRow.appendChild(nameCell);
 
               const debitCell = document.createElement("td");
               debitCell.innerText = item.debit;
               newRow.appendChild(debitCell);
+              debitCell.style.opacity = "0";
+              debitCell.setAttribute("class", `cell${doctorId}`);
 
               const creditCell = document.createElement("td");
+              creditCell.setAttribute("class", `cell${doctorId}`);
               creditCell.innerText = item.credit;
               newRow.appendChild(creditCell);
+              creditCell.style.opacity = "0";
 
               const dateCell = document.createElement("td");
-              dateCell.innerText = "2023-08-16"; // Измените на фактическую дату
+              dateCell.innerText = item.date; // Используйте фактическое поле для даты
+              dateCell.setAttribute("class", `cell${doctorId}`);
               newRow.appendChild(dateCell);
+              dateCell.style.opacity = "0";
 
               const commentCell = document.createElement("td");
               commentCell.innerText = item.comment;
               newRow.appendChild(commentCell);
+              commentCell.style.opacity = "0";
+              commentCell.setAttribute("class", `cell${doctorId}`);
 
               const statusCell = document.createElement("td");
-              statusCell.innerText = "Успешно"; // Измените на статус из item.status
+              statusCell.innerText = item.status; // Используйте фактическое поле для статуса
               newRow.appendChild(statusCell);
+              statusCell.style.opacity = "0";
+              statusCell.setAttribute("class", `cell${doctorId}`);
 
               table.appendChild(newRow);
             });
 
-            const detailsRow = document.createElement("tr");
-            detailsRow.id = `detailsRow${doctorId}`;
-            detailsRow.style.display = "none";
-
-            const detailsCell = document.createElement("td");
-            detailsCell.colSpan = 6;
-            detailsCell.appendChild(table);
-
-            detailsRow.appendChild(detailsCell);
-            tablesContainer.appendChild(detailsRow);
+            // Добавляем пустую строку в таблицу
+            const emptyRow = document.createElement("tr");
+            const emptyCell = document.createElement("td");
+            emptyCell.colSpan = 6;
+            emptyRow.appendChild(emptyCell);
+            table.appendChild(emptyRow);
           }
         }
+
+        tablesContainer.appendChild(table);
       });
+
+      function showMoreDetails(doctorId) {
+        const name = document.getElementById(`row${doctorId}`);
+        const cells = document.querySelectorAll(`.cell${doctorId}`);
+        cells.forEach((cell) => (cell.style.opacity = "1"));
+      }
 
       function toggleDetails(tableId) {
         var detailsTable = document.getElementById(tableId);
