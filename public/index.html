@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script src="./jquery.js"></script>
+
+
+<style>
+    .notvisible {
+        display: none !important;
+    }
+
+    .visible {
+        display: flex !important;
+    }
+</style>
+
+<body>
+
+    <div style="display:flex;">
+        <table border="1">
+
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Дебит</th>
+                    <th>Кредит</th>
+                    <th>Дата</th>
+                    <th>Комментарий</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+
+            <tbody id="tablebody">
+
+
+            </tbody>
+
+        </table>
+
+
+        <div id="historyTransaction" class="notvisible">
+
+
+        </div>
+    </div>
+
+
+</body>
+
+<script>
+    const data = [
+        {
+            id: 1,
+            doctorId: 1,
+            name: "Иванов Иванов",
+            debit: 100,
+            credit: 200,
+            comment: "Buy",
+            status: 0,
+        },
+        {
+            id: 2,
+            doctorId: 2,
+            name: "Alaman",
+            debit: 100,
+            credit: 200,
+            comment: "Buy",
+            status: 0,
+        },
+        {
+            id: 3,
+            doctorId: 2,
+            name: "Alaman",
+            debit: 100,
+            credit: 200,
+            comment: "Buy",
+            status: 0,
+        }
+    ]
+
+
+    var html = ``
+
+    for (let index = 0; index < data.length; index++) {
+
+        html += `<tr>
+                <td class="nameBtn" doctorid="${data[index].doctorId}" style="cursor: pointer;">${data[index].name}</td>
+                <td>${data[index].debit}</td>
+                <td>${data[index].credit}</td>
+                <td>${data[index].comment}</td>
+                <td>1</td>
+                <td>${data[index].status}</td>
+            </tr>`
+    }
+
+    $("#tablebody").append(html)
+</script>
+
+</html>

@@ -39,38 +39,14 @@
       button[type="submit"]:hover {
         background-color: #0056b3;
       }
-      .main-container {
-        display: none;
-      }
-      .main-table {
-        border-collapse: collapse;
-        width: 600px;
-      }
-      .main-table td {
-        border: 1px solid #ccc;
-        padding: 10px;
-      }
-      .name-column {
-        width: 20%;
-        cursor: pointer;
-      }
-      .details-table {
-        border-collapse: collapse;
-        width: 100%;
-        display: none;
-      }
-      .details-table th,
-      .details-table td {
-        border: 1px solid #ccc;
-        padding: 10px;
-      }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <div class="login-container" id="div">
       <h2>Login</h2>
       <form action="#" method="post" id="form">
-        <input type="text" name="username" placeholder="Username" required />
+        <input type="text" name="login" placeholder="Login" required />
         <input
           type="password"
           name="password"
@@ -81,10 +57,6 @@
       </form>
     </div>
 
-    <div id="card" class="main-container">
-      <div id="tablesContainer"></div>
-    </div>
-
     <script>
       const loginContainer = document.getElementById("div");
       const buttonLogin = document.getElementById("login-botton");
@@ -93,138 +65,33 @@
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        loginContainer.style.display = "none";
-        card.style.display = "block";
+        const formData = new FormData(form);
+        const formDataObject = {};
 
-        const data = [
-          {
-            id: 1,
-            doctorId: 1,
-            name: "Иванов Иванов",
-            debit: 100,
-            credit: 200,
-            comment: "Buy",
-            status: 0,
-          },
-          {
-            id: 2,
-            doctorId: 2,
-            name: "Alaman",
-            debit: 100,
-            credit: 200,
-            comment: "Buy",
-            status: 0,
-          },
-          {
-            id: 3,
-            doctorId: 2,
-            name: "Alaman",
-            debit: 100,
-            credit: 200,
-            comment: "Buy",
-            status: 0,
-          },
-        ];
-
-        const tablesContainer = document.getElementById("tablesContainer");
-        tablesContainer.innerHTML = ""; // Очищаем контейнер
-        const table = document.createElement("table");
-        table.className = "main-table";
-        table.innerHTML = `
-      <tr>
-          <th class="name-column">Имя</th>
-          <th>Дебит</th>
-          <th>Кредит</th>
-          <th>Дата</th>
-          <th>Комментарий</th>
-          <th>Статус</th>
-      </tr>
-  `;
-
-        const groupedData = {};
-        data.forEach((item) => {
-          if (!groupedData[item.doctorId]) {
-            groupedData[item.doctorId] = [];
-          }
-          groupedData[item.doctorId].push(item);
+        formData.forEach((value, key) => {
+          formDataObject[key] = value;
         });
 
-        for (const doctorId in groupedData) {
-          if (groupedData.hasOwnProperty(doctorId)) {
-            const transactions = groupedData[doctorId];
+        const apiUrl = "http://localhost:3000/login";
 
-            transactions.forEach((item, index) => {
-              const newRow = document.createElement("tr");
-              newRow.setAttribute("id", `row${doctorId}`);
+        fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formDataObject),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Ошибка при запросе: " + response.status);
+            }
 
-              const nameCell = document.createElement("td");
-              nameCell.className = "name-column";
-              nameCell.innerText = index === 0 ? item.name : ""; // Отображаем имя только в первой строке
-              nameCell.setAttribute("data-userid", doctorId);
-              nameCell.onclick = function () {
-                showMoreDetails(doctorId);
-              };
-              newRow.appendChild(nameCell);
-
-              const debitCell = document.createElement("td");
-              debitCell.innerText = item.debit;
-              newRow.appendChild(debitCell);
-              debitCell.style.opacity = "0";
-              debitCell.setAttribute("class", `cell${doctorId}`);
-
-              const creditCell = document.createElement("td");
-              creditCell.setAttribute("class", `cell${doctorId}`);
-              creditCell.innerText = item.credit;
-              newRow.appendChild(creditCell);
-              creditCell.style.opacity = "0";
-
-              const dateCell = document.createElement("td");
-              dateCell.innerText = item.date; // Используйте фактическое поле для даты
-              dateCell.setAttribute("class", `cell${doctorId}`);
-              newRow.appendChild(dateCell);
-              dateCell.style.opacity = "0";
-
-              const commentCell = document.createElement("td");
-              commentCell.innerText = item.comment;
-              newRow.appendChild(commentCell);
-              commentCell.style.opacity = "0";
-              commentCell.setAttribute("class", `cell${doctorId}`);
-
-              const statusCell = document.createElement("td");
-              statusCell.innerText = item.status; // Используйте фактическое поле для статуса
-              newRow.appendChild(statusCell);
-              statusCell.style.opacity = "0";
-              statusCell.setAttribute("class", `cell${doctorId}`);
-
-              table.appendChild(newRow);
-            });
-
-            // Добавляем пустую строку в таблицу
-            const emptyRow = document.createElement("tr");
-            const emptyCell = document.createElement("td");
-            emptyCell.colSpan = 6;
-            emptyRow.appendChild(emptyCell);
-            table.appendChild(emptyRow);
-          }
-        }
-
-        tablesContainer.appendChild(table);
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       });
-
-      function showMoreDetails(doctorId) {
-        const name = document.getElementById(`row${doctorId}`);
-        const cells = document.querySelectorAll(`.cell${doctorId}`);
-        cells.forEach((cell) => (cell.style.opacity = "1"));
-      }
-
-      function toggleDetails(tableId) {
-        var detailsTable = document.getElementById(tableId);
-        if (detailsTable.style.display === "none") {
-          detailsTable.style.display = "table";
-        } else {
-          detailsTable.style.display = "none";
-        }
-      }
     </script>
   </body>
 </html>
