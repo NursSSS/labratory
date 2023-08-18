@@ -6,8 +6,8 @@ class AuthService {
       const response = await db.query(
         `
             SELECT *
-            FROM users
-            WHERE login = $1 AND password = $2
+            FROM "user"
+            WHERE "login" = $1 AND "password" = $2
             LIMIT 1;
         `,
         [login, password]

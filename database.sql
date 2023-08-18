@@ -1,15 +1,15 @@
-create TABLE user(
+CREATE TABLE user(
     id SERIAL PRIMARY KEY,
     login VARCHAR(255),
     password VARCHAR(255),
 )
 
-create TABLE doctor(
+CREATE TABLE doctor(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
 )
 
-create TABLE transaction(
+CREATE TABLE transaction(
     id SERIAL PRIMARY KEY,
     debit INTEGER,
     credit INTEGER,
