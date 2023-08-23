@@ -22,7 +22,7 @@ app.get('/index', (req, res) => {
     try{
         res.sendFile(`${publicPath}/index.html`)
     } catch(err) {
-
+        console.log(err)
     }
 })
 
