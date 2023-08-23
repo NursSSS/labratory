@@ -9,7 +9,7 @@ CREATE TABLE doctor(
     name VARCHAR(255),
 )
 
-CREATE TABLE transaction(
+CREATE TABLE if not EXIST transaction(
     id SERIAL PRIMARY KEY,
     debit INTEGER,
     credit INTEGER,

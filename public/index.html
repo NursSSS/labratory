@@ -104,7 +104,13 @@
     }
 
     function transaction(doctorId) {
+      const historyTransaction = document.getElementById("historyTransaction");
+      const tableButtons = document.getElementById("table-buttons");
       document.getElementById("tablebodyinfo").innerHTML = "";
+
+      if (tableButtons) {
+        historyTransaction.removeChild(tableButtons);
+      }
 
       const apiUrl = `http://localhost:3000/api/transactions/${doctorId}`;
 
@@ -143,6 +149,7 @@
           <td>${item.comment}</td>
           <td>${item.date}</td>
           <td>${item.status}</td>
+          <td><input type="checkbox" class="transaction-checkbox" data-transaction-id="${item.id}"></td>
         </tr>`;
       }
 
@@ -151,11 +158,11 @@
         </tr>`;
 
       const buttons = `
-        <div style="display: flex; justify-content: space-between;">
+        <div id="table-buttons" style="display: flex; justify-content: space-between;">
         <button style="margin: 10px 0;" onclick="openTransactionForm(${doctor_id})">
           Добавить запись
         </button>
-        <button style="margin: 10px 0;" >
+        <button style="margin: 10px 0;" id="close-cash-button" onclick="selectedIds()">
           Закрыть кассу
         </button>
         </div>
@@ -203,6 +210,44 @@
         })
         .catch((error) => {
           console.error(error);
+        });
+    }
+
+    function selectedIds() {
+      const selectedIds = [];
+
+      $(".transaction-checkbox:checked").each(function () {
+        const transactionId = $(this).data("transaction-id");
+        selectedIds.push(transactionId);
+      });
+
+      if (!selectedIds.length) {
+        alert("Список пуст");
+        return;
+      }
+
+      const data = {
+        transaction_ids: selectedIds,
+      };
+
+      const apiUrl = `http://localhost:3000/api/transactions`;
+
+      fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((response) => {
+          if (!response.ok) {
+            alert(response.status);
+            return;
+          }
+
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error during fetch:", error);
         });
     }
   </script>

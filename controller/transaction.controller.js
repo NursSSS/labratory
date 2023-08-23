@@ -19,7 +19,7 @@ class TransactionController {
   async create(req, res) {
     try {
       const { debit, credit, comment, status } = req.body;
-      const { id } = req.params
+      const { id } = req.params;
 
       const transaction = await transactionService.create({
         doctor_id: id,
@@ -29,7 +29,29 @@ class TransactionController {
         status,
       });
 
-      res.send(transaction)
+      res.send(transaction);
+    } catch (err) {
+      res.status(400).json({
+        message: "Bad request",
+      });
+    }
+  }
+
+  async closeTransactions(req, res) {
+    try {
+      const { transaction_ids } = req.body;
+
+      if (!transaction_ids.length) {
+        res.status(400).json({
+          message: "Bad request",
+        });
+      }
+
+      await transactionService.closeTransactions(transaction_ids);
+
+      res.status(200).json({
+        message: "Ok"
+      });
     } catch (err) {
       res.status(400).json({
         message: "Bad request",

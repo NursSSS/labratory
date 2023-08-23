@@ -21,7 +21,7 @@ class TransactionService {
       `
           SELECT *
           FROM transaction
-          WHERE doctor_id = $1
+          WHERE doctor_id = $1 AND is_close = false
       `,
       [doctor.id]
     );
@@ -57,6 +57,21 @@ class TransactionService {
     }
 
     return response.rows[0];
+  }
+
+  async closeTransactions(transaction_ids) {
+    const responseTransactions = await db.query(
+      `
+        UPDATE transaction SET is_close = true WHERE id = ANY($1::int[])
+      `,
+      [transaction_ids]
+    )
+
+    if (!responseTransactions.rowCount) {
+      throw new Error("Not found")
+    }
+
+    return responseTransactions.rows
   }
 }
 
