@@ -1,4 +1,7 @@
 const db = require('../db')
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
+dotenv.config()
 
 class AuthService {
   async login({ login, password }) {
@@ -19,11 +22,23 @@ class AuthService {
 
       const user = response.rows[0];
 
-      return user;
+      const token = generateAccessToken(user.id, user.login)
+
+      return token;
     } catch (err) {
       throw new Error("Authentication failed");
     }
   }
+
+}
+
+const generateAccessToken = (id, login) => {
+  const payload = {
+    id,
+    login
+  }
+
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' })
 }
 
 module.exports = new AuthService();

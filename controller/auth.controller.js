@@ -5,9 +5,9 @@ class AuthController {
     const { login, password } = req.body;
 
     try{
-        const user = await authService.login({login, password})
+        const token = await authService.login({login, password})
 
-        res.send(user)
+        res.send({token})
     } catch(err) {
         res.status(403).json({
             message: "Access denied"

@@ -6,10 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      rel="stylesheet"
+    />
+
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    ></script>
   </head>
 
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+    body {
+      height: 100vh;
+      background: #212529;
+    }
+
     .notvisible {
       display: none !important;
     }
@@ -17,70 +45,317 @@
     .visible {
       display: flex !important;
     }
+
+    .main-table {
+      width: 300px;
+      height: fit-content;
+    }
+
+    html {
+      font-family: sans-serif;
+      line-height: 1.15;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      width: 100%;
+      height: 100%;
+    }
+
+    .transaction-checkbox {
+      width: 18px;
+      height: 18px;
+    }
+
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    #create-transaction {
+      height: 100vh;
+      background: #212529;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .panel-heading {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #forgot {
+      min-width: 100px;
+      margin-left: auto;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    .form-inline label {
+      padding-left: 10px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .btn.btn-primary {
+      margin-top: 20px;
+      border-radius: 15px;
+    }
+
+    .btn-danger {
+      margin-top: 10px;
+      border-radius: 15px;
+    }
+
+    .btn-success {
+      border-radius: 15px;
+    }
+
+    .panel {
+      min-height: 400px;
+      min-width: 360px;
+      box-shadow: 5px 5px 10px rgb(218, 218, 218);
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+
+    .input-field {
+      border-radius: 5px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      color: #4343ff;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      border: none;
+      outline: none;
+      box-shadow: none;
+      width: 100%;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    a[target="_blank"] {
+      position: relative;
+      transition: all 0.1s ease-in-out;
+    }
+
+    .bordert {
+      border-top: 1px solid #aaa;
+      position: relative;
+    }
+
+    .bordert:after {
+      content: "or connect with";
+      position: absolute;
+      top: -13px;
+      left: 33%;
+      background-color: #fff;
+      padding: 0px 8px;
+    }
+
+    @media (max-width: 360px) {
+      #forgot {
+        margin-left: 0;
+        padding-top: 10px;
+      }
+
+      body {
+        height: 100%;
+      }
+
+      .container {
+        margin: 30px 0;
+      }
+
+      .bordert:after {
+        left: 25%;
+      }
+    }
   </style>
 
   <body>
-    <div style="position: relative" id="main">
-      <div>
-        <table border="1">
+    <div style="position: relative" id="main" class="">
+      <div style="display: flex">
+        <table border="1" class="table table-hover table-dark main-table">
           <thead>
             <tr>
               <th width="200">Имя</th>
             </tr>
           </thead>
 
-          <tbody id="tablebody"></tbody>
+          <tbody id="tablebody" class="table-group-divider"></tbody>
         </table>
 
         <div
           id="historyTransaction"
           class="notvisible"
           style="
-            position: absolute;
-            left: 208px;
-            top: 0;
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            width: 100%;
           "
         >
-          <table border="1">
+          <table
+            border="1"
+            class="table table-hover table-dark table-striped"
+            style="height: 100%"
+          >
             <thead>
               <tr>
                 <th width="200">Дебит</th>
                 <th width="200">Кредит</th>
-                <th width="200">Коментарий</th>
+                <th width="200">Комментарий</th>
                 <th width="200">Дата</th>
-                <th width="200">Статус</th>
+                <th width="50">Статус</th>
+                <th width="30">Выбрать</th>
               </tr>
             </thead>
 
-            <tbody id="tablebodyinfo"></tbody>
+            <tbody id="tablebodyinfo" class="table-group-divider"></tbody>
           </table>
         </div>
       </div>
     </div>
 
     <div id="create-transaction" class="notvisible">
-      <h2>Создать запись</h2>
-      <form action="#" method="post" id="form-transaction">
-        <input type="number" name="debit" placeholder="Debit" />
-        <input type="number" name="credit" placeholder="Credit" />
-        <input type="text" name="comment" placeholder="Comment" />
-        <input type="number" name="status" placeholder="Status" required />
-        <button type="submit" id="transaction-button">Отправить</button>
-      </form>
+      <div class="row">
+        <div class="panel border bg-white">
+          <div class="panel-heading" id="transaction-header">
+            <h4 class="pt-3 font-weight-bold">Создать запись для</h4>
+          </div>
+          <div class="panel-body p-3">
+            <form id="form-transaction" method="POST">
+              <div class="form-group py-2">
+                <div class="input-field">
+                  <span class="fas fa-money-bill p-2" aria-hidden="true"></span>
+                  <input
+                    type="number"
+                    name="debit"
+                    placeholder="Введите дебит"
+                  />
+                </div>
+              </div>
+              <div class="form-group py-2">
+                <div class="input-field">
+                  <span
+                    class="fas fa-credit-card p-2"
+                    aria-hidden="true"
+                  ></span>
+                  <input
+                    type="number"
+                    name="credit"
+                    placeholder="Введите кредит"
+                  />
+                </div>
+              </div>
+              <div class="form-group py-2">
+                <div class="input-field">
+                  <span class="fas fa-comment p-2" aria-hidden="true"></span>
+                  <input
+                    type="text"
+                    name="comment"
+                    placeholder="Введите комментарий"
+                  />
+                </div>
+              </div>
+              <div class="d-grid gap-2">
+                <button
+                  id="transaction-button"
+                  type="submit"
+                  class="btn btn-primary"
+                >
+                  Отправить
+                </button>
+                <button
+                  id="cancel-transaction-button"
+                  type="button"
+                  class="btn btn-danger"
+                >
+                  Отмена
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div
+      id="confirm"
+      style="
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.426);
+        position: absolute;
+        top: 0;
+        left: 0;
+      "
+      class="notvisible"
+    >
+      <div
+        id="modal"
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      ></div>
+    </div>
+
+    <script type="text/javascript"></script>
   </body>
 
   <script>
     const apiUrl = "http://localhost:3000/api/doctors";
 
-    fetch(apiUrl)
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "http://localhost:3000";
+    }
+
+    fetch(apiUrl, {
+      method: "Get",
+      headers: {
+        "content-type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
       .then((response) => {
-        if (!response.ok) {
+        if (response.status === 403) {
+          localStorage.removeItem("jwtToken");
+          window.location.href = "http://localhost:3000";
+        } else if (!response.ok) {
           alert("Error fetching doctors: " + response.status);
           return;
         }
+
         return response.json();
       })
       .then((responseData) => {
@@ -95,9 +370,9 @@
 
       for (let doctor of data) {
         html += `<tr>
-          <td class="nameBtn" doctorid="${doctor.id}" style="cursor: pointer;"
-          onclick="transaction(${doctor.id})">${doctor.name}</td>
-        </tr>`;
+            <td class="nameBtn" doctorid="${doctor.id}" style="cursor: pointer;"
+            onclick="transaction(${doctor.id})">${doctor.name}</td>
+          </tr>`;
       }
 
       $("#tablebody").append(html);
@@ -108,15 +383,41 @@
       const tableButtons = document.getElementById("table-buttons");
       document.getElementById("tablebodyinfo").innerHTML = "";
 
+      $(`td[doctorid="${doctorId}"]`).addClass("table-active");
+
+      const nameButtons = [...document.querySelectorAll(".nameBtn")];
+
+      for (let nameButton of nameButtons) {
+        if (
+          nameButton.attributes.class.value
+            .split(" ")
+            .includes("table-active") &&
+          nameButton.attributes.doctorId.value != doctorId
+        ) {
+          $(
+            `td[doctorid="${nameButton.attributes.doctorId.value}"]`
+          ).removeClass("table-active");
+        }
+      }
+
       if (tableButtons) {
         historyTransaction.removeChild(tableButtons);
       }
 
       const apiUrl = `http://localhost:3000/api/transactions/${doctorId}`;
 
-      fetch(apiUrl)
+      fetch(apiUrl, {
+        method: "Get",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
         .then((response) => {
-          if (!response.ok) {
+          if (response.status === 403) {
+            localStorage.removeItem("jwtToken");
+            window.location.href = "http://localhost:3000";
+          } else if (!response.ok) {
             alert("Error fetching transactions: " + response.status);
             return;
           }
@@ -143,30 +444,34 @@
         debit += item.debit;
         credit += item.credit;
 
-        html += `<tr>
-          <td>${item.debit}</td>
-          <td>${item.credit}</td>
-          <td>${item.comment}</td>
-          <td>${item.date}</td>
-          <td>${item.status}</td>
-          <td><input type="checkbox" class="transaction-checkbox" data-transaction-id="${item.id}"></td>
-        </tr>`;
+        html += `<tr style="height: 41.2px">
+            <td>${item.debit}</td>
+            <td>${item.credit}</td>
+            <td>${item.comment}</td>
+            <td>${item.date}</td>
+            <td>${item.status}</td>
+            <td><input type="checkbox" class="transaction-checkbox" data-transaction-id="${
+              item.id
+            }" data-transaction-sum="${item.debit - item.credit}"></td>
+          </tr>`;
       }
 
+      const total = debit - credit;
+
       html += `<tr>
-          <td colspan=6 align="right" >Итого: ${debit - credit}</td>
-        </tr>`;
+            <td colspan=6 align="right" >Итого: <span style="color:#00ff00">${total}</span></td>
+          </tr>`;
 
       const buttons = `
-        <div id="table-buttons" style="display: flex; justify-content: space-between;">
-        <button style="margin: 10px 0;" onclick="openTransactionForm(${doctor_id})">
-          Добавить запись
-        </button>
-        <button style="margin: 10px 0;" id="close-cash-button" onclick="selectedIds()">
-          Закрыть кассу
-        </button>
-        </div>
-      `;
+          <div id="table-buttons" style="display: flex; justify-content: space-between;">
+          <button class="btn btn-success" style="margin: 10px 0;" onclick="openTransactionForm(${doctor_id})">
+            Добавить запись
+          </button>
+          <button class="btn btn-danger" style="margin: 10px 0;" onclick="confirm(${total})">
+            Закрыть кассу
+          </button>
+          </div>
+        `;
 
       $("#tablebodyinfo").append(html);
       $("#historyTransaction").append(buttons);
@@ -176,9 +481,45 @@
       $("#main").removeClass("visible").addClass("notvisible");
       $("#create-transaction").removeClass("notvisible").addClass("visible");
 
+      const apiUrl = `http://localhost:3000/api/doctors/${doctorId}`;
+
+      fetch(apiUrl, {
+        method: "Get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => {
+          if (response.status === 403) {
+            localStorage.removeItem("jwtToken");
+            window.location.href = "http://localhost:3000";
+          } else if (!response.ok) {
+            alert(response.status);
+            return;
+          }
+
+          return response.json();
+        })
+        .then((responseData) => {
+          const html = `<h3>${responseData.name}</h3>`;
+
+          $("#transaction-header").append(html);
+
+          return;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       $("#transaction-button").click(function (e) {
         e.preventDefault();
         createTransaction(doctorId);
+      });
+
+      $("#cancel-transaction-button").click(function (e) {
+        e.preventDefault();
+        window.location.href = "http://localhost:3000/index";
       });
     }
 
@@ -190,6 +531,26 @@
       formData.forEach((value, key) => {
         formDataObject[key] = value;
       });
+      console.log(formDataObject)
+
+      if (
+        !formDataObject.debit &&
+        !formDataObject.credit
+      ) {
+        alert("Нужно указать, либо дебит, либо кредит");
+        return;
+      } else if (!formDataObject.hasOwnProperty("credit")) {
+        formData.credit = 0;
+      } else if (!formDataObject.hasOwnProperty("debit")) {
+        formData.debit = 0;
+      } else if (!formDataObject.hasOwnProperty("comment")) {
+        formData.comment = "";
+      }
+
+      formDataObject.status = 0;
+
+      formDataObject.credit = Number(formDataObject.credit);
+      formDataObject.debit = Number(formDataObject.debit);
 
       const apiUrl = `http://localhost:3000/api/transactions/${doctorId}`;
 
@@ -197,11 +558,15 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify(formDataObject),
       })
         .then((response) => {
-          if (!response.ok) {
+          if (response.status === 403) {
+            localStorage.removeItem("jwtToken");
+            window.location.href = "http://localhost:3000";
+          } else if (!response.ok) {
             alert(response.status);
             return;
           }
@@ -236,10 +601,15 @@
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify(data),
-      }).then((response) => {
-          if (!response.ok) {
+      })
+        .then((response) => {
+          if (response.status === 403) {
+            localStorage.removeItem("jwtToken");
+            window.location.href = "http://localhost:3000";
+          } else if (!response.ok) {
             alert(response.status);
             return;
           }
@@ -249,6 +619,40 @@
         .catch((error) => {
           console.error("Error during fetch:", error);
         });
+    }
+
+    function confirm() {
+      $("#confirm").removeClass("notvisible").addClass("visible");
+      let total = 0;
+
+      $(".transaction-checkbox:checked").each(function () {
+        const transactionSum = $(this).data("transaction-sum");
+        total += transactionSum;
+      });
+
+      const buttons = `
+          <div id="confirm-buttons" style="display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          padding: 175px;
+          background: white;
+          border-radius: 50px;">
+            <h2 >Итого: <span style="color:#00ff00">${total}</span></h2>
+            <button class="btn btn-success" style="margin: 10px 0;" onclick="selectedIds()">
+              Подтверить
+            </button>
+            <button class="btn btn-danger" style="margin: 10px 0;" onclick="remove()">
+              Отмена
+            </button>
+          </div>
+        `;
+
+      $("#modal").append(buttons);
+    }
+
+    function remove() {
+      $("#confirm").removeClass("visible").addClass("notvisible");
+      $("#confirm-buttons").remove();
     }
   </script>
 </html>

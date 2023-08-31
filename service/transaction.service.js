@@ -26,7 +26,13 @@ class TransactionService {
       [doctor.id]
     );
 
-    return response.rows;
+    const transactions = response.rows;
+
+    transactions.sort((a,b) => {
+      return new Date(b.date) - new Date(a.date)
+    })
+
+    return transactions
   }
 
   async create({ doctor_id, debit, credit, comment, status }) {
